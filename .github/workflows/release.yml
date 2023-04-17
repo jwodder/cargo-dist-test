@@ -92,6 +92,7 @@ jobs:
             --output-format=json \
             ${{ matrix.dist-args }} > dist-manifest.json
           jq -r ".artifacts[]?.path | select(. != null)" dist-manifest.json | \
+            tr -d '\r' | \
             xargs -t gh release upload ${{ github.ref_name }}
 
   publish-release:
