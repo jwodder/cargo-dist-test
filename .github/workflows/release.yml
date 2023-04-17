@@ -91,9 +91,8 @@ jobs:
             --tag=${{ github.ref_name }} \
             --output-format=json \
             ${{ matrix.dist-args }} > dist-manifest.json
-          jq -r ".artifacts[]?.path | select(. != null)" dist-manifest.json | \
-            tr -d '\r' | \
-            xargs -t gh release upload ${{ github.ref_name }}
+          jq -j '.artifacts[]?.path | select(. != null) | "\(.)\u0000"' dist-manifest.json | \
+            xargs -t -0 gh release upload ${{ github.ref_name }}
 
   publish-release:
     needs: [create-release, upload-artifacts]
