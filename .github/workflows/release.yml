@@ -86,13 +86,12 @@ jobs:
       - name: Run cargo-dist
         shell: bash
         run: |
-          set -ex
           cargo dist build \
             --tag=${{ github.ref_name }} \
             --output-format=json \
             ${{ matrix.dist-args }} > dist-manifest.json
           jq -j '.artifacts[]?.path | select(. != null) | "\(.)\u0000"' dist-manifest.json | \
-            xargs -t -0 gh release upload ${{ github.ref_name }}
+            xargs -0 gh release upload ${{ github.ref_name }}
 
   publish-release:
     needs: [create-release, upload-artifacts]
