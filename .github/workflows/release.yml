@@ -44,7 +44,7 @@ jobs:
 
           gh release upload ${{ github.ref_name }} dist-manifest.json
 
-          HAS_RELEASES=$(jq --raw-output ".releases != null" | dist-manifest.json)
+          HAS_RELEASES=$(jq --raw-output ".releases != null" dist-manifest.json)
           echo "has-releases=$HAS_RELEASES" >> "$GITHUB_OUTPUT"
 
   upload-artifacts:
